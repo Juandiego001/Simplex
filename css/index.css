@@ -1,0 +1,42 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+header {
+  width: 100%;
+  background-color: #0077B6;
+  text-align: center;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1em 0;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #ADE8F4;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+section > button {
+  border: none;
+  color: white;
+  padding: 2rem;
+  border-radius: 5px;
+  background-color: #0077B6;
+}
+
+footer {
+  text-aling: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+  background-color: #03045E;
+  color: white;
+}
