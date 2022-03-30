@@ -1,8 +1,17 @@
 function main() {
   let variablesDecision = 0;
   let cantidadRestricciones = 0;
-  let coeficientesFuncionObjetivo = [];
-  let vectorB = [];
+  let C = [];
+  let CB = [];
+  let XB = [];
+  let A = [];
+  let B = [[1,0,0],[0,1,0],[0,0,1]];
+  let CBBiAmC = [];
+  let CBBi = [];
+  let CBBib = 0;
+  let BiA = [];
+  let Bi = [];
+  let Bib = [];
 
   variablesDecision = parseInt(prompt("Ingrese la cantidad de variables de decisión"));
   cantidadRestricciones = parseInt(prompt("Ingrese la cantidad de restricciones"));
@@ -35,7 +44,7 @@ function main() {
     }
   }
 
-  
+
 
   console.log(coeficientesRestricciones);
   console.log(vectorB);
