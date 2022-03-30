@@ -34,6 +34,7 @@ function main() {
       console.log("Coeficiente de la variable X" + (j+1) + ": " + coeficientesRestricciones[i][j]);
     }
   }
+
   
 
   console.log(coeficientesRestricciones);
