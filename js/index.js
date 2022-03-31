@@ -5,7 +5,8 @@ function main() {
   let CB = [];
   let XB = [];
   let A = [];
-  let B = [[1,0,0],[0,1,0],[0,0,1]];
+  let B = [];
+  let b = [];
   let CBBiAmC = [];
   let CBBi = [];
   let CBBib = 0;
@@ -16,37 +17,22 @@ function main() {
   variablesDecision = parseInt(prompt("Ingrese la cantidad de variables de decisión"));
   cantidadRestricciones = parseInt(prompt("Ingrese la cantidad de restricciones"));
 
-  let coeficientesRestricciones = [];
-
   for (let i = 0; i < cantidadRestricciones; i++) {
-    coeficientesRestricciones[i] = new Array(variablesDecision);
+    A[i] = new Array(variablesDecision);
   }
   
   for (let i = 0; i < variablesDecision; i++) {
-    coeficientesFuncionObjetivo[i] = parseInt(prompt("Ingrese el coeficiente de la variable X" + (i+1)));
+    A[i] = parseInt(prompt("Ingrese el coeficiente de la variable X" + (i+1)));
   }
 
   for (let i = 0; i < cantidadRestricciones; i++) {
     for (let j = 0; j < variablesDecision; j++) {
-      coeficientesRestricciones[i][j] = parseInt(prompt("Ingrese el coeficiente de la variable X" + (j+1) + " en la restricción #" + (i+1)));
+      A[i][j] = parseInt(prompt("Ingrese el coeficiente de la variable X" + (j+1) + " en la restricción #" + (i+1)));
     }
-    vectorB[i] = parseInt(prompt("Ingrese el resultado de la restricción #" + (i+1)));
+    b[i] = parseInt(prompt("Ingrese el resultado de la restricción #" + (i+1)));
   }
 
-  // for (let i = 0; i < coeficientesFuncionObjetivo.length; i++) {
-  //   console.log("Coeficiente #" + i + ": " + coeficientesFuncionObjetivo[i]);
-  // }
+  
 
-  for (let i = 0; i < cantidadRestricciones; i++) {
-    console.log("Para la restriccion: " + (i+1) + ":\n");
-    for (let j = 0; j < variablesDecision; j++) {
-      console.log("Coeficiente de la variable X" + (j+1) + ": " + coeficientesRestricciones[i][j]);
-    }
-  }
-
-
-
-  console.log(coeficientesRestricciones);
-  console.log(vectorB);
 
 }

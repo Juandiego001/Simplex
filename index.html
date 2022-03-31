@@ -5,19 +5,65 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./css/index.css" />
+
+  <!-- Fuente de texto: Inria serif - Serifada -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200&family=Inria+Serif:wght@300&family=Libre+Baskerville&display=swap" rel="stylesheet">
+
+  <!-- Fuente de texto: Dosis - Sans serifas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200&family=Libre+Baskerville&display=swap" rel="stylesheet">
+
   <title>Simplex</title>
 </head>
 <body>
+
   <header>
-    Simplex
+    <h1>Simplex</h1>
   </header>
-  
-  <section>
-    <button onclick="main()">Iniciar</button>
+
+  <!-- Sección de contenedores de entradas iniciales (Variables de decisión y restricciones) -->
+  <section class="seccion-contenedores-titulos">
+    <!-- Contenedor de cantidad de variables de decisión -->
+    <div class="contenedor-variables-decision">
+      <!-- Título de contenedor: 'Cantidad de varibles de decisión' -->
+      <h2>Cantidad de varibles de decisión</h2>
+    </div>
+
+    <!-- Contenedor de cantidad de restricciones -->
+    <div class="contenedor-restricciones">
+      <!-- Título de contenedor: 'Cantidad de restricciones' -->
+      <h2>Cantidad de restricciones</h2>
+    </div>
+
+    
+  </section>
+
+  <!-- Sección de entradas -->
+  <section class="seccion-entradas">
+    <form>
+      <div>
+        <input type="number" placeholder="0"  id="entrada-variables" name="entrada-variables" class="entrada-variables" />
+        <input type="number" placeholder="0" id="entrada-restricciones" name="entrada-restricciones" class="entrada-restricciones" />
+      </div>
+
+      <button clasS="boton-iniciar" onclick="main()">Iniciar</button>
+    </form>
   </section>
 
   <footer>
-    Este es el footer
+    <!-- Título: Simplex + Símbolo copyright -->
+    <h1>
+      Simplex &copy;
+    </h1>
+
+    <!-- Párrafo de información -->
+    <p>
+      Este es el método <a href="index.html">Simplex</a> implementado por el estudiante Juan Diego Cobo Cabal de sexto semestre de Ingeniería Informática 
+      para la materia de Investigación de operaciones con el proefosor Hector Fabio Bonilla.
+    </p>
   </footer>
 
   <script src="./js/index.js"></script>

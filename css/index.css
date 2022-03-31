@@ -13,15 +13,43 @@ header {
   justify-content: center;
   align-items: center;
   padding: 1em 0;
+  min-height: 15vh;
 }
 
-section {
+header h1 {
+  font-family: 'Inria serif', serif;
+  font-size: 3em;
+  font-weight: 300;
+}
+
+.seccion-contenedores-titulos {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  background-color: #0077B6;
+  min-height: 10vh;
+}
+
+.contenedor-variables-decision, .contenedor-restricciones {
   display: flex;
+  justify-self: center;
+  align-self: center;
   justify-content: center;
   align-items: center;
-  background-color: #ADE8F4;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  height: 100%;
+  width: 100%;
+}
+
+.contenedor-variables-decision > h2, .contenedor-restricciones > h2 {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  font-family: 'Inria serif', serif;
+  font-weight: 300;
+  color: white;
+}
+
+.contenedor-variables-decision {
+  border-right: 1px solid #CAF0F8;
 }
 
 section > button {
@@ -32,11 +60,92 @@ section > button {
   background-color: #0077B6;
 }
 
+/* Seccion de entradas */
+/* En esta seccion se dispondrá un form con todo un ancho del section */
+/* el cual tendrá un display grid con una separación en columnas del 50% */
+/* donde a su vez habrán dos inputs de fondo blanco con la fuente serifada Inria serif */
+/* Y donde finalmente se encontrará un botón de todo el ancho del section */
+/* Con el color de fondo igual a los titulos de cada input */
+/* y con la fuente en dosis */
+.seccion-entradas {
+  width: 100%;
+  min-height: 10vh;
+  height: 15vh;
+}
+
+.seccion-entradas form {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 50% 50%;
+}
+
+.seccion-entradas form div {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.seccion-entradas form div input {
+  border: 0;
+  width: 90%;
+  background-color: white;
+  font-family: 'Dosis', sans-serif;
+  font-weight: bold;
+  font-size: 1.5em;
+  text-align: center;
+  justify-self: center;
+  color: black;
+}
+
+.seccion-entradas form div input:focus {
+  outline: none;
+}
+
+.seccion-entradas form button {
+  height: 100%;
+  width: 100%;
+  font-family: 'Dosis', sans-serif;
+  color: white;
+  background-color: #0077B6;
+  border: 0;
+  font-size: 1.5em;
+}
+
+.seccion-entradas form button:hover {
+  cursor: pointer;
+  
+}
+
 footer {
-  text-aling: center;
-  display: flex;
+  min-height: 20vh;
+  display: grid;
+  grid-template-columns: 20% 80%;
   justify-content: center;
   align-items: center;  
   background-color: #03045E;
   color: white;
+}
+
+footer h1 {
+  font-size: 3rem;
+  text-align: center;
+  font-family: 'Inria serif', serif;
+  font-weight: 300;
+}
+
+footer p {
+  font-size: 1.5rem;
+  text-align: justify;
+  font-family: 'Dosis', sans-serif;
+  width: 100%;
+  padding-left: 1em;
+  padding-right: 1em;
+
+}
+
+footer p > a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
 }
