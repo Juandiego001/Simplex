@@ -52,23 +52,23 @@ async function main(event) {
 
   let footer = document.getElementsByTagName('footer')[0];
 
-  document.getElementsByTagName('body')[0].insertBefore(divContVd, footer);
-
+  
   for (let i = 0; i < cantVd; i++) {
     let etiqt = await etiqtVd(i+1);
     divContVd.appendChild(etiqt);
   }
+  
+  document.getElementsByTagName('body')[0].insertBefore(divContVd, footer);
 
-  // for (let i = 0; i < cantVd; i++) {
-  //   A[i] = parseInt(prompt("Ingrese el coeficiente de la variable X" + (i+1)));
-  // }
+  let divContInVd = await contInVd();
+  divContInVd.style.gridTemplateColumns = columnasGrid;
 
-  // for (let i = 0; i < cantRs; i++) {
-  //   for (let j = 0; j < cantVd; j++) {
-  //     A[i][j] = parseInt(prompt("Ingrese el coeficiente de la variable X" + (j+1) + " en la restricción #" + (i+1)));
-  //   }
-  //   b[i] = parseInt(prompt("Ingrese el resultado de la restricción #" + (i+1)));
-  // }
+  for (let i = 0; i < cantVd; i++) {
+    let input = await inputVd(i+1);
+    divContInVd.appendChild(input);
+  }
+
+  document.getElementsByTagName('body')[0].insertBefore(divContInVd, footer);
 
 
 }
@@ -84,6 +84,19 @@ function contEtVd() {
 
   return new Promise(resolve => {
     resolve(divContVd);
+  });
+}
+
+function contInVd() {
+  let divContInVd = document.createElement('div');
+
+  divContInVd.style.width = '100%';
+  divContInVd.style.height = '15vh';
+  divContInVd.style.minHeight = '15vh';
+  divContInVd.style.display = 'grid';
+
+  return new Promise(resolve => {
+    resolve(divContInVd);
   });
 }
 
@@ -105,5 +118,18 @@ function etiqtVd(i) {
 
   return new Promise(resolve => {
     resolve(etiqt);
+  });
+}
+
+function inputVd(i) {
+  let input = document.createElement('input');
+  
+  input.className = 'inputVd';
+  input.placeholder = '0';
+  input.id = `inputVd${i}`;
+
+
+  return new Promise(resolve => {
+    resolve(input);
   });
 }
