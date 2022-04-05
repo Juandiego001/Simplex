@@ -15,11 +15,13 @@
 // etiqtVd -> Esta función devuelve la etiqueta para poner en el contenendor
 // mencionado en la parte de arriba, ya estilizado.
 
+// Variables globales.
+let cantVd = 0;
+let cantRs = 0;
+
 async function main(event) {
   event.preventDefault();
 
-  let cantVd = 0;
-  let cantRs = 0;
   let C = [];
   let CB = [];
   let XB = [];
@@ -89,7 +91,7 @@ async function main(event) {
     divContResInVd.style.gridTemplateColumns = columnasGrid;
 
     for (let j = 0; j < cantVd; j++) {
-      let input = await inputResVd(j);
+      let input = await inputResVd(j+1);
       divContResInVd.appendChild(input);
     }
 
@@ -101,9 +103,11 @@ async function main(event) {
     document.getElementsByTagName('body')[0].insertBefore(divContResEtiVd, footer);
     document.getElementsByTagName('body')[0].insertBefore(divContResInVd, footer);
     document.getElementsByTagName('body')[0].insertBefore(divContResEtiMenorIgual, footer);
-    document.getElementsByTagName('body')[0].insertBefore(inputResMenorIgual, footer);
-    
+    document.getElementsByTagName('body')[0].insertBefore(inputResMenorIgual, footer); 
   }
+
+  let btnRealizar = await contBtnRealizar();
+  document.getElementsByTagName('body')[0].insertBefore(btnRealizar, footer);
 
 }
 
@@ -286,4 +290,33 @@ function inResMenorIgual(j) {
   return new Promise(resolve => {
     resolve(input);
   });
+}
+
+function contBtnRealizar() {
+  let btnRealizar = document.createElement('button');
+
+  btnRealizar.className = 'btn-realizar';
+  btnRealizar.innerHTML = '¡Realizar simplex!';
+  btnRealizar.addEventListener('click', realizarSimplex);
+
+  return new Promise(resolve => {
+    resolve(btnRealizar);
+  });
+}
+
+
+// Segunda función principal.
+// Se encargará de realizar todas las operaciones del método simplex.
+function realizarSimplex() {
+  // inputVd + número (desde 1: inputVd1, inputVd2, etc.) -> Coeficientes en la función objetivo
+  // inputResVd + número (desde 1: inputResVd1, inputResVd2, etc.) -> Coeficientes de cada restricción
+  // inputResMenorIgual + número (desde 1: inputResMenorIgual1, inputResMenorIgual2, etc.) -> Valores de menor o igual a de cada restricción
+
+  console.log('Coeficiente de la primera variable de decisión en la restricción #1: ' + document.getElementById('inputResVd1').value);
+  console.log('Coeficiente de la segunda variable de decisión en la restricción #1 : ' + document.getElementById('inputResVd2').value);
+  console.log('Resultado de la restricción #1: ' + document.getElementById('inputResMenorIgual1').value);
+
+  console.log('Cantidad de variables de decisión: ' + cantVd);
+
+  alert('Hello World');
 }
