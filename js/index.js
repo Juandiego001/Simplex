@@ -52,7 +52,6 @@ async function main(event) {
 
   let footer = document.getElementsByTagName('footer')[0];
 
-  
   for (let i = 0; i < cantVd; i++) {
     let etiqt = await etiqtVd(i+1);
     divContVd.appendChild(etiqt);
@@ -70,6 +69,41 @@ async function main(event) {
 
   document.getElementsByTagName('body')[0].insertBefore(divContInVd, footer);
 
+  // Restricciones
+
+  for (let i = 0; i < cantRs; i++) {
+    // Contenedor para ubicar la etiqueta de:
+    // "Restricción #1"
+    let divContResTituVd = await contResTituVd();
+    divContResTituVd.innerHTML = `Restricción #${(i+1)}`;
+    
+    let  divContResEtiVd = await contResEtiVd();
+    divContResEtiVd.style.gridTemplateColumns = columnasGrid;
+
+    for (let j = 0; j < cantVd; j++) {
+      let etiqtResVd = await etiResVd(j+1);
+      divContResEtiVd.appendChild(etiqtResVd);
+    }
+
+    let divContResInVd = await contResInVd();
+    divContResInVd.style.gridTemplateColumns = columnasGrid;
+
+    for (let j = 0; j < cantVd; j++) {
+      let input = await inputResVd(j);
+      divContResInVd.appendChild(input);
+    }
+
+    let divContResEtiMenorIgual = await contResEtiMenorIgual();
+    let inputResMenorIgual = await inResMenorIgual(i+1);
+    
+    // Añadiendo todos los componentes de las restricciones
+    document.getElementsByTagName('body')[0].insertBefore(divContResTituVd, footer);
+    document.getElementsByTagName('body')[0].insertBefore(divContResEtiVd, footer);
+    document.getElementsByTagName('body')[0].insertBefore(divContResInVd, footer);
+    document.getElementsByTagName('body')[0].insertBefore(divContResEtiMenorIgual, footer);
+    document.getElementsByTagName('body')[0].insertBefore(inputResMenorIgual, footer);
+    
+  }
 
 }
 
@@ -128,6 +162,126 @@ function inputVd(i) {
   input.placeholder = '0';
   input.id = `inputVd${i}`;
 
+
+  return new Promise(resolve => {
+    resolve(input);
+  });
+}
+
+function contResTituVd() {
+
+  let divResTituVd = document.createElement('div');
+
+  divResTituVd.style.width = '100%';
+  divResTituVd.style.height = '15vh';
+  divResTituVd.style.minHeight = '15vh';
+  divResTituVd.style.backgroundColor = '#0077B6';
+  divResTituVd.style.fontFamily = "'Inria serif', 'serif'";
+  divResTituVd.style.fontSize = '1.5rem';
+  divResTituVd.style.color = 'white';
+  divResTituVd.style.textAlign = 'center';
+  divResTituVd.style.display = 'flex';
+  divResTituVd.style.justifyContent = 'center';
+  divResTituVd.style.alignItems = 'center';
+
+  return new Promise(resolve => {
+    resolve(divResTituVd);
+  })
+}
+
+function contResEtiVd() {
+  let divContResEtiVd = document.createElement('div');
+
+  divContResEtiVd.style.width = '100%';
+  divContResEtiVd.style.height = '15vh';
+  divContResEtiVd.style.minHeight = '15vh';
+  divContResEtiVd.style.backgroundColor = '#0077B6';
+  divContResEtiVd.style.display = 'grid';
+
+  return new Promise(resolve => {
+    resolve(divContResEtiVd);
+  })
+
+}
+
+function etiResVd(j) {
+  let etiqt = document.createElement('h3');
+
+  etiqt.innerHTML = `X<sub>${j}</sub>`;
+
+  etiqt.style.fontFamily = "'Inria serif', 'serif'";
+  etiqt.style.fontSize = '1.5em';
+  etiqt.style.fontWeight = '300';
+  etiqt.style.color = 'white';
+  etiqt.style.width = '100%';
+  etiqt.style.height = '100%';
+  etiqt.style.display = 'flex';
+  etiqt.style.justifyContent = 'center';
+  etiqt.style.alignItems = 'center';
+
+  return new Promise(resolve => {
+    resolve(etiqt);
+  });
+}
+
+function contResInVd() {
+  let divResInVd = document.createElement('div');
+
+  divResInVd.style.width = '100%';
+  divResInVd.style.height = '15vh';
+  divResInVd.style.minHeight = '15vh';
+  divResInVd.style.backgroundColor = 'white';
+  divResInVd.style.display = 'grid';
+
+  return new Promise(resolve => {
+    resolve(divResInVd);
+  })
+}
+
+function inputResVd(j) {
+  let input = document.createElement('input');
+  
+  input.className = 'inputVd';
+  input.placeholder = '0';
+  input.id = `inputResVd${j}`;
+
+
+  return new Promise(resolve => {
+    resolve(input);
+  }); 
+}
+
+function contResEtiMenorIgual() {
+  let divContResEtiMenorIgual = document.createElement('div');
+
+  divContResEtiMenorIgual.style.width = '100%';
+  divContResEtiMenorIgual.style.width = '100%';
+  divContResEtiMenorIgual.style.height = '15vh';
+  divContResEtiMenorIgual.style.minHeight = '15vh';
+  divContResEtiMenorIgual.style.backgroundColor = '#0077B6';
+  divContResEtiMenorIgual.style.fontFamily = "'Inria serif', 'serif'";
+  divContResEtiMenorIgual.style.fontSize = '1.5rem';
+  divContResEtiMenorIgual.style.color = 'white';
+  divContResEtiMenorIgual.style.display = 'flex';
+  divContResEtiMenorIgual.style.justifyContent = 'center';
+  divContResEtiMenorIgual.style.alignItems = 'center';
+
+  divContResEtiMenorIgual.innerHTML = 'Menor o igual a';
+
+  return new Promise(resolve => {
+    resolve(divContResEtiMenorIgual);
+  });
+}
+
+function inResMenorIgual(j) {
+  let input = document.createElement('input');
+  
+  input.className = 'inputVd';
+  input.placeholder = '0';
+  input.id = `inputResMenorIgual${j}`;
+  input.style.width = '100%';
+  input.style.height = '15vh';
+  input.style.minHeight = '15vh';
 
   return new Promise(resolve => {
     resolve(input);
