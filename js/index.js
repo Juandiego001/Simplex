@@ -22,25 +22,8 @@ let cantRs = 0;
 async function main(event) {
   event.preventDefault();
 
-  let C = [];
-  let CB = [];
-  let XB = [];
-  let A = [];
-  let B = [];
-  let b = [];
-  let CBBiAmC = [];
-  let CBBi = [];
-  let CBBib = 0;
-  let BiA = [];
-  let Bi = [];
-  let Bib = [];
-
   cantVd = document.getElementById('entrada-variables').value;
   cantRs = document.getElementById('entrada-restricciones').value;
-
-  for (let i = 0; i < cantRs; i++) {
-    A[i] = new Array(cantVd);
-  }
 
   // Se obtiene el contenedor ya estilizado.
   let divContVd = await contEtVd();
@@ -304,6 +287,13 @@ function contBtnRealizar() {
   });
 }
 
+function mmult(matriz1, matriz2) {
+
+}
+
+function minversa(matriz) {
+
+}
 
 // Segunda función principal.
 // Se encargará de realizar todas las operaciones del método simplex.
@@ -312,6 +302,36 @@ function realizarSimplex() {
   // inputResVd + número (desde 1: inputResVd1, inputResVd2, etc.) -> Coeficientes de cada restricción
   // inputResMenorIgual + número (desde 1: inputResMenorIgual1, inputResMenorIgual2, etc.) -> Valores de menor o igual a de cada restricción
 
+  let C = [];
+  let CB = [];
+  let XB = [];
+  let A = [];
+  let B = [];
+  let b = [];
+  let CBBiAmC = [];
+  let CBBi = [];
+  let CBBib = 0;
+  let BiA = [];
+  let Bi = [];
+  let Bib = [];
+
+  // Vector C
+  // Coeficientes de las variables básicas en la función objetivo
+  for (let i  = 0; i < cantVd; i++) {
+    C[i] = parseInt(document.getElementById(`inputVd${(i+1)}`).value);
+  }
+
+  // Matriz A
+  // Coeficientes de las variables básicas en cada una de las restricciones
+  for (let i = 0; i < cantRs; i++) {
+    A[i] = new Array(cantVd);
+    for (let j = 0; j  < cantVd; j++) {
+      A[i][j] = parseInt(document.getElementById(`inputResVd${(j+1)}`).value);
+    }
+  }
+
+  
+
   console.log('Coeficiente de la primera variable de decisión en la restricción #1: ' + document.getElementById('inputResVd1').value);
   console.log('Coeficiente de la segunda variable de decisión en la restricción #1 : ' + document.getElementById('inputResVd2').value);
   console.log('Resultado de la restricción #1: ' + document.getElementById('inputResMenorIgual1').value);
@@ -319,4 +339,5 @@ function realizarSimplex() {
   console.log('Cantidad de variables de decisión: ' + cantVd);
 
   alert('Hello World');
+
 }
