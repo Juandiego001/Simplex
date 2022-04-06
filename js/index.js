@@ -302,9 +302,14 @@ function realizarSimplex() {
   // inputResVd + número (desde 1: inputResVd1, inputResVd2, etc.) -> Coeficientes de cada restricción
   // inputResMenorIgual + número (desde 1: inputResMenorIgual1, inputResMenorIgual2, etc.) -> Valores de menor o igual a de cada restricción
 
+  // Coeficientes en la función objetivo
   let C = [];
-  let CB = [];
-  let XB = [];
+
+  // Coeficientes en la función objetivo
+  let CB = [0,0,0];
+
+  // Variables de holgura
+  let XB = ['s1', 's2', 's3'];
   let A = [];
   let B = [];
   let b = [];
@@ -329,6 +334,16 @@ function realizarSimplex() {
       A[i][j] = parseInt(document.getElementById(`inputResVd${(j+1)}`).value);
     }
   }
+
+  // Vector b
+  // Valores de cada una de las restricciones
+  for (let i = 0; i < cantRs; i++) {
+    let menorIgual = parseInt(document.getElementById('inputResMenorIgual').value);
+    b[i] = menorIgual;
+  }
+
+  
+
 
   
 
