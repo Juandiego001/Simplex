@@ -292,6 +292,75 @@ function mmult(matriz1, matriz2) {
 
 }
 
+// Función para realizar la multiplicación de matrices
+// y la resta con el vector C
+function mmultmC(CBBi, A, C) {
+  let CBBiA = mmult(CBBi, A);
+  
+}
+
+// Función para verificar si ha finalizado la matriz identidad
+function verInversa(matriz) {
+  for (let i = 0; i < cantRs; i++) {
+    for (let j = 0; j < cantRs; j++) {
+      if (matriz[i][i] != 1) return false;
+      if (i != j && matriz[i][j] != 0) return false;
+      return true;
+    }
+  }
+}
+
+// Función para realizar una operación sobre el cálculo de la
+// matriz inversa
+function gaussJordan(matriz) {
+  for (let i = 0; i < cantRs; i++) {
+    for (let j = 0; j < cantRs; j++) {
+      if (matriz[i][i] != 1) {
+        // Tomamos el número que no es igual a 1
+        // y lo dividimos en toda la fila
+        let valorii = matriz[i][i];
+
+        // Hacemos la operación anterior en cada columna
+        // de la fila
+        for (let k = 0; k < cantRs*2; k++) {
+          matriz[i][k] = matriz[i][k] / valorii;
+        }
+
+        return gaussJordan(matriz);
+      }
+
+      if (i != j && matriz[i][j] != 0) {
+        // Obtenemos el valor para esa columna
+        // y vamos a buscar el valor que puede multiplicarse por otro valor
+        // y sumarse a la fila para convertirlo en un cero 
+        let valorij = matriz[i][j];
+        let valorMul = 0;
+        let filaOperable = 0;
+        for (let k = i + 1; i < cantRs; k++) {
+          if (matriz[k][j] != 0) {
+            valorMul = matriz[k][j];
+            filaOperable = k;
+            break;
+          }
+        }
+
+        // Definimos la operación que multiplicará a la fila k
+        //  y sumará a la fila i
+        let operacion = (valorij / valorMul) * (-1);
+
+        // Se realiza la operación
+        for (let k = 0; k < cantRs*2; k++) {
+          matriz[i][k] += matriz[filaOperable][k]*operacion;
+        }
+
+        return gaussJordan(matriz);
+      }
+    }
+  }
+
+  return matriz;
+}
+
 // Función para calcular la inversa
 function minversa(matriz) {
   // B =  | 2 3 4 |
@@ -323,8 +392,19 @@ function minversa(matriz) {
   let finish = false;
 
   while(!finish) {
-    
+    // Se verifica si ya finalizó el calculo de la matriz identidad
+    finish = verInversa(matriz);
+
+    if (finish) break;
+
+    // La función se encarga de realizar la inversa
+    matriz = gaussJordan(matriz); 
+
+    // Mostrar matriz
+    console.log(matriz);
   }
+
+  return matriz;
 }
 
 // Tercera función principal.
@@ -380,7 +460,13 @@ function simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib
     }
 
     Bi = minversa(B);
+    CBBi = mmult(CB, Bi);
+    CBBib = mmult(CBBi, b);
+    Bib = mmult(Bi, b);
+    CBBiAmC = mmultmC(CBBi, A, C);
 
+    // De lo contrario, es porque ya se tiene más de una iteración
+  } else {
 
   }
 
