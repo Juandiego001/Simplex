@@ -22,8 +22,8 @@ let cantRs = 0;
 async function main(event) {
   event.preventDefault();
 
-  cantVd = document.getElementById('entrada-variables').value;
-  cantRs = document.getElementById('entrada-restricciones').value;
+  cantVd = parseInt(document.getElementById('entrada-variables').value);
+  cantRs = parseInt(document.getElementById('entrada-restricciones').value);
 
   // Se obtiene el contenedor ya estilizado.
   let divContVd = await contEtVd();
@@ -74,7 +74,7 @@ async function main(event) {
     divContResInVd.style.gridTemplateColumns = columnasGrid;
 
     for (let j = 0; j < cantVd; j++) {
-      let input = await inputResVd(j+1);
+      let input = await inputResVd(i + 1, j+1);
       divContResInVd.appendChild(input);
     }
 
@@ -225,12 +225,12 @@ function contResInVd() {
   })
 }
 
-function inputResVd(j) {
+function inputResVd(i, j) {
   let input = document.createElement('input');
   
   input.className = 'inputVd';
   input.placeholder = '0';
-  input.id = `inputResVd${j}`;
+  input.id = `inputResVd${i}${j}`;
 
 
   return new Promise(resolve => {
@@ -289,7 +289,32 @@ function contBtnRealizar() {
 
 // Función para realizar multiplicaciones de matrices
 function mmult(matriz1, matriz2) {
+  // La variable res será la matriz resultante
+  // luego de realizar la multiplicación
+  let res = [];
 
+  // Se tomará la cantidad de columnas de la matriz2
+  // para crear el arreglo en res
+  console.log('Matriz2');
+  console.log(matriz2);
+
+  for (let i = 0; i < matriz1.length; i++) {
+    res[i] = new Array(matriz2[i].length);
+
+    // Se crea una variable count para ir guardando
+    // las sumas de las multiplicaciones
+    let count = 0;
+
+    for (let j = 0; j  < matriz1[i].length; j++) {
+      count += matriz1[i][j] * matriz2[j][i];
+    }
+
+    res[i].push(count);
+  }
+
+  console.log(res);
+
+  return res;
 }
 
 // Función para realizar la multiplicación de matrices
@@ -297,6 +322,16 @@ function mmult(matriz1, matriz2) {
 function mmultmC(CBBi, A, C) {
   let CBBiA = mmult(CBBi, A);
   
+  let res = [];
+
+  for (let i = 0; i < CBBiA.length; i++) {
+    res[i] = new Array(CBBiA[i].length);
+    for (let j = 0; j < CBBiA[i].length; j++) {
+      res[i][j] = CBBiA[i][j] - C[i][j];
+    }
+  }
+
+  return res;
 }
 
 // Función para verificar si ha finalizado la matriz identidad
@@ -320,12 +355,37 @@ function gaussJordan(matriz) {
         // y lo dividimos en toda la fila
         let valorii = matriz[i][i];
 
+        // Si el valorii es un 0, se debe
+        // hacer una operación de suma entre filas multiplicado por un escalar
+        if (valorii == 0) {
+          let valorMul = 0;
+          let filaOperable = 0;
+          for (let k = i + 1; i < cantRs; k++) {
+            if (matriz[k][j] != 0) {
+              valorMul = matriz[k][j];
+              filaOperable = k;
+              break;
+            }
+          }
+
+          // Definimos la operación que se va a hacer
+          let operacion = 1 / valorMul;
+
+          // Se realiza la operación
+          for (let k = 0; k < cantRs*2; k++) {
+            matriz[i][k] += matriz[filaOperable][k]*operacion;
+          }
+
+          return gaussJordan(matriz);
+        }
+
         // Hacemos la operación anterior en cada columna
         // de la fila
         for (let k = 0; k < cantRs*2; k++) {
           matriz[i][k] = matriz[i][k] / valorii;
         }
 
+        console.log('Matriz[i][i]: ' + matriz[i][i]);
         return gaussJordan(matriz);
       }
 
@@ -363,6 +423,13 @@ function gaussJordan(matriz) {
 
 // Función para calcular la inversa
 function minversa(matriz) {
+  // Se crea una variable resInversa que será la variable
+  // que se retornará
+  let resInversa = [];
+
+  console.log('Intentando Matriz inversa');
+  console.log(matriz);
+
   // B =  | 2 3 4 |
   //      | 2 3 5 |
   //      | 2 3 6 |
@@ -375,9 +442,9 @@ function minversa(matriz) {
   for (let i = 0; i < cantRs; i++) {
     for (let j = 0; j < cantRs; j++) {
       if (j == contador) {
-        matriz[[i](cantRs + j)] = 1;
+        matriz[i][(cantRs + j)] = 1;
       } else {
-        matriz[[i](cantRs + j)] = 0;
+        matriz[i][(cantRs + j)] = 0;
       }
     }
 
@@ -391,85 +458,121 @@ function minversa(matriz) {
   // la identidad de una matriz
   let finish = false;
 
+  
+
   while(!finish) {
     // Se verifica si ya finalizó el calculo de la matriz identidad
     finish = verInversa(matriz);
 
     if (finish) break;
 
-    // La función se encarga de realizar la inversa
-    matriz = gaussJordan(matriz); 
+    // La función se encarga de realizar la inversa.
+    // La matriz tendrá la forma que se muestra arriba.
+    // Por lo tanto, se debe tomar el resultado a partir de las siguientes columnas.
+    matriz = gaussJordan(matriz);
+
+    // Iniciamos desde la siguientes columnas
+    // donde se supone que hemos calculado la identidad
+    for (let i = 0; i < cantRs; i++) {
+      resInversa[i] = new Array(cantRs);
+      for (let j = 0; j < cantRs; j++) {
+        resInversa[i][j] = matriz[i][j + cantRs];
+      }
+    }
 
     // Mostrar matriz
-    console.log(matriz);
+    console.log(resInversa);
   }
 
-  return matriz;
+  return resInversa;
+}
+
+// Función para verificar si es la solución óptima
+function verOptima(matriz) {
+
+  // Se recorre toda la matriz verificando que cada uno de los
+  // valores en la columna es mayor o igual a 0
+  for (let i = 0; i  < matriz[0].length; i++) {
+    if (matriz[0][i] < 0) return false;
+  }
+
+  return true;
 }
 
 // Tercera función principal.
 function simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib, iteraciones) {
-  // Si la cantidad de iteraciones es 0,
-  // es porque se hará la iteración inicial
-  // Por ende, nada más se debe decidir la variable que sale
+  // Se debe decidir la variable que sale
   // y la variable que entra.
   // Para ello se escoge la variable más negativa.
-  if (iteraciones.length == 0) {
-    let aux = 0;
-    for (let i = 0; i < cantVd; i++) {
-      let inicial = CBBiAmC[i];  
-      if (inicial < aux) {
-        aux = inicial;
-      }
+  let aux = 0;
+  for (let i = 0; i < cantVd; i++) {
+    let inicial = CBBiAmC[i];  
+    if (inicial < aux) {
+      aux = inicial;
     }
-
-    // pos1 determinará la posición en la que se encontró el valor menor
-    // así se obtendrá la variable de decisión que ingresa a la función
-    let pos1 = CBBiAmC.indexOf(aux);
-
-    // Se crea un arreglo donde se irán guardando todos los ratios
-    let ratios = [];
-
-    // Posteriormente, se realiza un ciclo para ir almacenando cada ratio
-    for (let j = 0; j < cantRs; j++) {
-      let ratio = BiA[j][pos1]/Bib[j];
-      console.log("Ratio: " + ratio);
-      ratios[j] = cociente;
-    }
-
-    // Se crea una variable auxRatio para almacenar el mayor valor del
-    // arreglo de ratios
-    let auxRatio = Number.MAX_VALUE;
-    for (let j = 0; j < cantRs; j++) {
-      let inicial = ratios[j];
-      if (inicial < auxRatio && inicial > 0) {
-        auxRatio = inicial;
-      }
-    }
-
-    // La pos2 se obtiene a partir de los ratios
-    // y permite obtener la variable de salida
-    let pos2 = ratios.indexOf(auxRatio);
-
-    // Se cambia CB
-    CB[pos2] = C[pos2];
-
-    // Se cambia la matriz B
-    for (let j = 0; j < cantRs; j++) {
-      B[j][pos2] = A[j][pos2];
-    }
-
-    Bi = minversa(B);
-    CBBi = mmult(CB, Bi);
-    CBBib = mmult(CBBi, b);
-    Bib = mmult(Bi, b);
-    CBBiAmC = mmultmC(CBBi, A, C);
-
-    // De lo contrario, es porque ya se tiene más de una iteración
-  } else {
-
   }
 
+  // pos1 determinará la posición en la que se encontró el valor menor
+  // así se obtendrá la variable de decisión que ingresa a la función
+  let pos1 = CBBiAmC.indexOf(aux);
+
+  // Se crea un arreglo donde se irán guardando todos los ratios
+  let ratios = [];
+
+  // Posteriormente, se realiza un ciclo para ir almacenando cada ratio
+  // Si el dividendo es 0 de la matriz 
+  for (let j = 0; j < cantRs; j++) {
+    let ratio = -1;
+    if (BiA[j][pos1] != 0) ratio = Bib[j]/BiA[j][pos1];
+    ratios[j] = ratio;
+  }
+
+  // Se crea una variable auxRatio para almacenar el menor valor del
+  // arreglo de ratios
+  let auxRatio = Number.MAX_VALUE;
+  for (let j = 0; j < cantRs; j++) {
+    let inicial = ratios[j];
+    if (inicial < auxRatio && inicial > 0) {
+      auxRatio = inicial;
+    }
+  }
+
+  // La pos2 se obtiene a partir de los ratios
+  // y permite obtener la variable de salida
+  let pos2 = ratios.indexOf(auxRatio);
+
+  // Se cambia CB
+  CB[pos2] = C[pos2];  
+
+  // Se cambia la matriz B
+  for (let j = 0; j < cantRs; j++) {
+    B[j][pos2] = A[j][pos1];
+  }
+
+  // Realizamos los cambios en el vector XB
+  XB[pos2] = `X${(pos1+1)}`;
+
+  console.log('B');
+  console.log(B);
+
+  Bi = minversa(B);
+  CBBi = mmult(CB, Bi);
+  CBBib = mmult(CBBi, b);
+  Bib = mmult(Bi, b);
+  CBBiAmC = mmultmC(CBBi, A, C);
+
+  // Verificamos si la solución obtenida es la óptima
+  let optima = verOptima(CBBiAmC);
+
+  // Si es óptima, retornamos las iteraciones.
+  if (optima) {
+    console.log('Variable: ' + XB[i] + ' tiene un valor de: ' + Bib[i]);
+    iteraciones.push([C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib]);
+    return iteraciones;
+  } else {
+    iteraciones.push([C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib]);
+    return simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib, iteraciones);
+  }
 }
 
 // Segunda función principal.
@@ -541,8 +644,8 @@ function realizarSimplex() {
   // Coeficientes de las variables básicas en cada una de las restricciones
   for (let i = 0; i < cantRs; i++) {
     A[i] = new Array(cantVd);
-    for (let j = 0; j  < cantVd; j++) {
-      A[i][j] = parseInt(document.getElementById(`inputResVd${(j+1)}`).value);
+    for (let j = 0; j < cantVd; j++) {
+      A[i][j] = parseInt(document.getElementById(`inputResVd${(i+1)}${(j+1)}`).value);
     }
   }
 
@@ -562,12 +665,12 @@ function realizarSimplex() {
     contador++;
   }
 
-  console.log(B);
+  // console.log(B);
 
   // Vector b
   // Valores de cada una de las restricciones
   for (let i = 0; i < cantRs; i++) {
-    let menorIgual = parseInt(document.getElementById('inputResMenorIgual').value);
+    let menorIgual = parseInt(document.getElementById(`inputResMenorIgual${(i+1)}`).value);
     b[i] = menorIgual;
   }
 
@@ -598,17 +701,7 @@ function realizarSimplex() {
 
   iteraciones = simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib, iteraciones);
 
-
-
-
-  
-
-  console.log('Coeficiente de la primera variable de decisión en la restricción #1: ' + document.getElementById('inputResVd1').value);
-  console.log('Coeficiente de la segunda variable de decisión en la restricción #1 : ' + document.getElementById('inputResVd2').value);
-  console.log('Resultado de la restricción #1: ' + document.getElementById('inputResMenorIgual1').value);
-
-  console.log('Cantidad de variables de decisión: ' + cantVd);
-
-  alert('Hello World');
+  console.log('De la última iteración, obtenemos XB:\n' + iteraciones[iteraciones.length - 1][2]);
+  console.log('De la última iteración, obtenemos Bib:\n' + iteraciones[iteraciones.length - 1][11]);
 
 }
