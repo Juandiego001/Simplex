@@ -340,14 +340,17 @@ function verInversa(matriz) {
     for (let j = 0; j < cantRs; j++) {
       if (matriz[i][i] != 1) return false;
       if (i != j && matriz[i][j] != 0) return false;
-      return true;
     }
   }
+
+  return true;
 }
 
 // Función para realizar una operación sobre el cálculo de la
 // matriz inversa
 function gaussJordan(matriz) {
+  console.log('Matriz gaussJordan');
+  console.log(matriz);
   for (let i = 0; i < cantRs; i++) {
     for (let j = 0; j < cantRs; j++) {
       if (matriz[i][i] != 1) {
@@ -385,7 +388,7 @@ function gaussJordan(matriz) {
           matriz[i][k] = matriz[i][k] / valorii;
         }
 
-        console.log('Matriz[i][i]: ' + matriz[i][i]);
+        
         return gaussJordan(matriz);
       }
 
@@ -396,8 +399,8 @@ function gaussJordan(matriz) {
         let valorij = matriz[i][j];
         let valorMul = 0;
         let filaOperable = 0;
-        for (let k = i + 1; i < cantRs; k++) {
-          if (matriz[k][j] != 0) {
+        for (let k = 0; i < cantRs; k++) {
+          if (matriz[k][j] != 0 && k != i) {
             valorMul = matriz[k][j];
             filaOperable = k;
             break;
@@ -406,11 +409,11 @@ function gaussJordan(matriz) {
 
         // Definimos la operación que multiplicará a la fila k
         //  y sumará a la fila i
-        let operacion = (valorij / valorMul) * (-1);
+        let operacion = ((valorij / valorMul) * (-1));
 
         // Se realiza la operación
         for (let k = 0; k < cantRs*2; k++) {
-          matriz[i][k] += matriz[filaOperable][k]*operacion;
+          matriz[i][k] = matriz[i][k] + matriz[filaOperable][k]*operacion;
         }
 
         return gaussJordan(matriz);
@@ -458,11 +461,12 @@ function minversa(matriz) {
   // la identidad de una matriz
   let finish = false;
 
-  
-
   while(!finish) {
     // Se verifica si ya finalizó el calculo de la matriz identidad
     finish = verInversa(matriz);
+
+    console.log('Finsh');
+    console.log(finish);
 
     if (finish) break;
 
@@ -470,7 +474,7 @@ function minversa(matriz) {
     // La matriz tendrá la forma que se muestra arriba.
     // Por lo tanto, se debe tomar el resultado a partir de las siguientes columnas.
     matriz = gaussJordan(matriz);
-
+    
     // Iniciamos desde la siguientes columnas
     // donde se supone que hemos calculado la identidad
     for (let i = 0; i < cantRs; i++) {
@@ -482,6 +486,9 @@ function minversa(matriz) {
 
     // Mostrar matriz
     console.log(resInversa);
+    console.log(resInversa);
+
+    break;
   }
 
   return resInversa;
