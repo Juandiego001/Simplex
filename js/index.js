@@ -287,211 +287,29 @@ function contBtnRealizar() {
   });
 }
 
-// Función para realizar multiplicaciones de matrices
-function mmult(matriz1, matriz2) {
-  // La variable res será la matriz resultante
-  // luego de realizar la multiplicación
-  let res = [];
+function mostrarSolucion(XB, CBBib, Bib) {
+  let divSolucion = document.createElement('div');
 
-  // Se tomará la cantidad de columnas de la matriz2
-  // para crear el arreglo en res
-  console.log('Matriz2');
-  console.log(matriz2);
+  divSolucion.className = 'div-solucion';
 
-  for (let i = 0; i < matriz1.length; i++) {
-    res[i] = new Array(matriz2[i].length);
+  let p1 = document.createElement('p');
+  let p2 = document.createElement('p');
 
-    // Se crea una variable count para ir guardando
-    // las sumas de las multiplicaciones
-    let count = 0;
+  p1.innerHTML = 'Solución: ';  
+  p2.innerHTML = 'La solución óptima es Z = ' + CBBib + ' con las siguientes variables básicas: ';
 
-    for (let j = 0; j  < matriz1[i].length; j++) {
-      count += matriz1[i][j] * matriz2[j][i];
-    }
+  divSolucion.appendChild(p1);
+  divSolucion.appendChild(p2);
 
-    res[i].push(count);
+  for (let i = 0; i < XB.length; i++) {
+    let p = document.createElement('p');
+    p.innerHTML = `${XB[i]} = ${Bib[i]}`;
+    divSolucion.appendChild(p);
   }
 
-  console.log(res);
-
-  return res;
-}
-
-// Función para realizar la multiplicación de matrices
-// y la resta con el vector C
-function mmultmC(CBBi, A, C) {
-  let CBBiA = mmult(CBBi, A);
+  let footer = document.getElementsByTagName('footer')[0];
+  document.getElementsByTagName('body')[0].insertBefore(divSolucion, footer); 
   
-  let res = [];
-
-  for (let i = 0; i < CBBiA.length; i++) {
-    res[i] = new Array(CBBiA[i].length);
-    for (let j = 0; j < CBBiA[i].length; j++) {
-      res[i][j] = CBBiA[i][j] - C[i][j];
-    }
-  }
-
-  return res;
-}
-
-// Función para verificar si ha finalizado la matriz identidad
-function verInversa(matriz) {
-  for (let i = 0; i < cantRs; i++) {
-    for (let j = 0; j < cantRs; j++) {
-      if (matriz[i][i] != 1) return false;
-      if (i != j && matriz[i][j] != 0) return false;
-    }
-  }
-
-  return true;
-}
-
-// Función para realizar una operación sobre el cálculo de la
-// matriz inversa
-function gaussJordan(matriz) {
-  console.log('Matriz gaussJordan');
-  console.log(matriz);
-  for (let i = 0; i < cantRs; i++) {
-    for (let j = 0; j < cantRs; j++) {
-      if (matriz[i][i] != 1) {
-        // Tomamos el número que no es igual a 1
-        // y lo dividimos en toda la fila
-        let valorii = matriz[i][i];
-
-        // Si el valorii es un 0, se debe
-        // hacer una operación de suma entre filas multiplicado por un escalar
-        if (valorii == 0) {
-          let valorMul = 0;
-          let filaOperable = 0;
-          for (let k = i + 1; i < cantRs; k++) {
-            if (matriz[k][j] != 0) {
-              valorMul = matriz[k][j];
-              filaOperable = k;
-              break;
-            }
-          }
-
-          // Definimos la operación que se va a hacer
-          let operacion = 1 / valorMul;
-
-          // Se realiza la operación
-          for (let k = 0; k < cantRs*2; k++) {
-            matriz[i][k] += matriz[filaOperable][k]*operacion;
-          }
-
-          return gaussJordan(matriz);
-        }
-
-        // Hacemos la operación anterior en cada columna
-        // de la fila
-        for (let k = 0; k < cantRs*2; k++) {
-          matriz[i][k] = matriz[i][k] / valorii;
-        }
-
-        
-        return gaussJordan(matriz);
-      }
-
-      if (i != j && matriz[i][j] != 0) {
-        // Obtenemos el valor para esa columna
-        // y vamos a buscar el valor que puede multiplicarse por otro valor
-        // y sumarse a la fila para convertirlo en un cero 
-        let valorij = matriz[i][j];
-        let valorMul = 0;
-        let filaOperable = 0;
-        for (let k = 0; i < cantRs; k++) {
-          if (matriz[k][j] != 0 && k != i) {
-            valorMul = matriz[k][j];
-            filaOperable = k;
-            break;
-          }
-        }
-
-        // Definimos la operación que multiplicará a la fila k
-        //  y sumará a la fila i
-        let operacion = ((valorij / valorMul) * (-1));
-
-        // Se realiza la operación
-        for (let k = 0; k < cantRs*2; k++) {
-          matriz[i][k] = matriz[i][k] + matriz[filaOperable][k]*operacion;
-        }
-
-        return gaussJordan(matriz);
-      }
-    }
-  }
-
-  return matriz;
-}
-
-// Función para calcular la inversa
-function minversa(matriz) {
-  // Se crea una variable resInversa que será la variable
-  // que se retornará
-  let resInversa = [];
-
-  console.log('Intentando Matriz inversa');
-  console.log(matriz);
-
-  // B =  | 2 3 4 |
-  //      | 2 3 5 |
-  //      | 2 3 6 |
-  // Posiciones = 0 1 2  
-
-  // Se añadirá a la matriz a la que se le calculará la inversa
-  // la matriz identidad y se creara una matriz n x n + cantRs (n x n + cantidad de restricciones)
-  let contador = 0;
-
-  for (let i = 0; i < cantRs; i++) {
-    for (let j = 0; j < cantRs; j++) {
-      if (j == contador) {
-        matriz[i][(cantRs + j)] = 1;
-      } else {
-        matriz[i][(cantRs + j)] = 0;
-      }
-    }
-
-    contador++;
-  }
-
-  // B = | 2 3 4 1 0 0 |
-  //     | 2 3 5 0 1 0 |
-  //     | 2 3 6 0 0 1 |
-  // La variable finish determinará si ya se ha calculado
-  // la identidad de una matriz
-  let finish = false;
-
-  while(!finish) {
-    // Se verifica si ya finalizó el calculo de la matriz identidad
-    finish = verInversa(matriz);
-
-    console.log('Finsh');
-    console.log(finish);
-
-    if (finish) break;
-
-    // La función se encarga de realizar la inversa.
-    // La matriz tendrá la forma que se muestra arriba.
-    // Por lo tanto, se debe tomar el resultado a partir de las siguientes columnas.
-    matriz = gaussJordan(matriz);
-    
-    // Iniciamos desde la siguientes columnas
-    // donde se supone que hemos calculado la identidad
-    for (let i = 0; i < cantRs; i++) {
-      resInversa[i] = new Array(cantRs);
-      for (let j = 0; j < cantRs; j++) {
-        resInversa[i][j] = matriz[i][j + cantRs];
-      }
-    }
-
-    // Mostrar matriz
-    console.log(resInversa);
-    console.log(resInversa);
-
-    break;
-  }
-
-  return resInversa;
 }
 
 // Función para verificar si es la solución óptima
@@ -549,7 +367,7 @@ function simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib
   let pos2 = ratios.indexOf(auxRatio);
 
   // Se cambia CB
-  CB[pos2] = C[pos2];  
+  CB[pos2] = C[pos1];
 
   // Se cambia la matriz B
   for (let j = 0; j < cantRs; j++) {
@@ -559,21 +377,23 @@ function simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib
   // Realizamos los cambios en el vector XB
   XB[pos2] = `X${(pos1+1)}`;
 
-  console.log('B');
-  console.log(B);
+  Bi = math.inv(B);
+  CBBi = math.multiply(CB, Bi);
+  CBBib = math.multiply(CBBi, b);
+  Bib = math.multiply(Bi, b);
+  CBBiAmC = math.subtract(math.multiply(CBBi, A), C);
 
-  Bi = minversa(B);
-  CBBi = mmult(CB, Bi);
-  CBBib = mmult(CBBi, b);
-  Bib = mmult(Bi, b);
-  CBBiAmC = mmultmC(CBBi, A, C);
+  console.log('CBBiAmC');
+  console.log(CBBiAmC);
 
   // Verificamos si la solución obtenida es la óptima
   let optima = verOptima(CBBiAmC);
 
   // Si es óptima, retornamos las iteraciones.
   if (optima) {
-    console.log('Variable: ' + XB[i] + ' tiene un valor de: ' + Bib[i]);
+    for (let i = 0; i < XB.length; i++) {
+      console.log('Variable: ' + XB[i] + ' tiene un valor de: ' + Bib[i]);
+    }
     iteraciones.push([C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib]);
     return iteraciones;
   } else {
@@ -672,8 +492,6 @@ function realizarSimplex() {
     contador++;
   }
 
-  // console.log(B);
-
   // Vector b
   // Valores de cada una de las restricciones
   for (let i = 0; i < cantRs; i++) {
@@ -710,5 +528,7 @@ function realizarSimplex() {
 
   console.log('De la última iteración, obtenemos XB:\n' + iteraciones[iteraciones.length - 1][2]);
   console.log('De la última iteración, obtenemos Bib:\n' + iteraciones[iteraciones.length - 1][11]);
+
+  mostrarSolucion(iteraciones[iteraciones.length - 1][2], iteraciones[iteraciones.length - 1][10], iteraciones[iteraciones.length - 1][11]);
 
 }
