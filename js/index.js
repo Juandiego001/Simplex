@@ -146,6 +146,7 @@ function inputVd(i) {
   let input = document.createElement('input');
   
   input.className = 'inputVd';
+  input.type = 'number';
   input.placeholder = '0';
   input.id = `inputVd${i}`;
 
@@ -229,6 +230,7 @@ function inputResVd(i, j) {
   let input = document.createElement('input');
   
   input.className = 'inputVd';
+  input.type = 'number';
   input.placeholder = '0';
   input.id = `inputResVd${i}${j}`;
 
@@ -264,6 +266,7 @@ function inResMenorIgual(j) {
   let input = document.createElement('input');
   
   input.className = 'inputVd';
+  input.type = 'number';
   input.placeholder = '0';
   input.id = `inputResMenorIgual${j}`;
   input.style.width = '100%';
@@ -402,9 +405,84 @@ function simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib
   }
 }
 
+// Mostrar iteraciones
+function mostrarIteraciones(i, BiA) {
+  let divGeneral = document.createElement('div');
+  let h2 = document.createElement('h2');
+  let divGrid = document.createElement('div');
+
+  // Estilizandolo div
+  divGeneral.style.width = '100%';
+  divGeneral.style.minHeight = '55vh';
+  divGeneral.style.backgroundColor = '#0077B6';
+  divGeneral.style.display = 'grid';
+  divGeneral.style.gridTemplateRows = '20% 80%';
+  divGeneral.style.justifyContent = 'center';
+  divGeneral.style.alignItems = 'center';
+  divGeneral.style.textAlign = 'center';
+
+  // Estilizando h2
+  h2.innerHTML =  `Iteración #${i}`
+  h2.style.width = '100%';
+  h2.style.height = '100%';
+  h2.style.display = 'flex';
+  h2.style.justifyContent = 'center';
+  h2.style.alignItems = 'center';
+  h2.style.alignSelf = 'center';
+  h2.style.fontFamily = "'Inria serif', 'serif'";
+  h2.style.color = 'white';
+  h2.style.fontSize = '1.5rem';
+  h2.style.textAlign = 'center';
+  h2.style.paddingTop = '.25rem';
+
+  divGeneral.append(h2);
+
+  // Estilizando divGrid
+  divGrid.style.width = '100%';
+  divGrid.style.height = '90%';
+  divGrid.style.backgroundColor = '#0077B6';
+  divGrid.style.display = 'grid';
+  divGrid.style.gridTemplateColumns = `${(parseInt((100/cantVd)) + '%' + ' ').repeat(cantVd)}`;
+  divGrid.style.gridTemplateColumns = `${(parseInt((100/cantRs)) + '%' + ' ').repeat(cantRs)}`;
+  divGrid.style.justifyContent = 'center';
+  divGrid.style.alignItems = 'center';
+  divGrid.style.textAlign = 'center';
+  divGrid.style.alignSelf = 'center';
+  divGrid.style.paddingTop = '.25rem';
+
+  for (let i = 0; i < cantRs; i++) {
+    for (let j = 0; j < cantVd; j++) {
+      let valor = document.createElement('p');
+
+      valor.style.width = '100%';
+      valor.style.height = '100%';
+      valor.style.fontFamily = "'Inria serif', 'serif'";
+      valor.style.color = 'white';
+      valor.style.fontSize = '1.25rem';
+      valor.style.display = 'flex';
+      valor.style.justifyContent = 'center';
+      valor.style.alignItems = 'center';
+      valor.style.textAlign = 'center';
+      valor.style.borderTop = '1px solid white';
+      valor.style.borderLeft = '1px solid white';
+      valor.style.padding = '.25rem';
+
+      valor.innerHTML = BiA[i][j];
+
+      divGrid.append(valor);
+    }
+  }
+
+  divGeneral.appendChild(divGrid);
+
+  return new Promise(resolve => {
+    resolve(divGeneral);
+  })
+}
+
 // Segunda función principal.
 // Se encargará de realizar todas las operaciones del método simplex.
-function realizarSimplex() {
+async function realizarSimplex() {
   // inputVd + número (desde 1: inputVd1, inputVd2, etc.) -> Coeficientes en la función objetivo
   // inputResVd + número (desde 1: inputResVd1, inputResVd2, etc.) -> Coeficientes de cada restricción
   // inputResMenorIgual + número (desde 1: inputResMenorIgual1, inputResMenorIgual2, etc.) -> Valores de menor o igual a de cada restricción
@@ -526,8 +604,16 @@ function realizarSimplex() {
 
   iteraciones = simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib, iteraciones);
 
-  console.log('De la última iteración, obtenemos XB:\n' + iteraciones[iteraciones.length - 1][2]);
-  console.log('De la última iteración, obtenemos Bib:\n' + iteraciones[iteraciones.length - 1][11]);
+  let footer = document.getElementsByTagName('footer')[0];
+  let body = document.getElementsByTagName('body')[0];
+
+  for (let i = 0; i < iteraciones.length; i++) {
+    console.log(iteraciones[i][8]);
+    let divIteracion = await mostrarIteraciones((i+1), iteraciones[i][8]);
+
+    body.insertBefore(divIteracion, footer);
+  }
+
 
   mostrarSolucion(iteraciones[iteraciones.length - 1][2], iteraciones[iteraciones.length - 1][10], iteraciones[iteraciones.length - 1][11]);
 
