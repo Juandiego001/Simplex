@@ -316,12 +316,12 @@ function mostrarSolucion(XB, CBBib, Bib) {
 }
 
 // Función para verificar si es la solución óptima
-function verOptima(matriz) {
+function verOptima(vector) {
 
   // Se recorre toda la matriz verificando que cada uno de los
   // valores en la columna es mayor o igual a 0
-  for (let i = 0; i  < matriz[0].length; i++) {
-    if (matriz[0][i] < 0) return false;
+  for (let i = 0; i  < vector.length; i++) {
+    if (vector[i] < 0) return false;
   }
 
   return true;
@@ -385,6 +385,7 @@ function simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib
   CBBib = math.multiply(CBBi, b);
   Bib = math.multiply(Bi, b);
   CBBiAmC = math.subtract(math.multiply(CBBi, A), C);
+  BiA = math.multiply(Bi, A);
 
   console.log('CBBiAmC');
   console.log(CBBiAmC);
@@ -400,6 +401,7 @@ function simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib
     iteraciones.push([C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib]);
     return iteraciones;
   } else {
+    console.log('INGRESO POR EL APARTADO DE QUE NO HA ENCONTRADO LA SOLUCIÓN OPTIMA');
     iteraciones.push([C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib]);
     return simplexRecursivo(C, CB, XB, A, B, b, Bi, CBBi, BiA, CBBiAmC, CBBib, Bib, iteraciones);
   }
@@ -443,7 +445,7 @@ function mostrarIteraciones(i, BiA) {
   divGrid.style.backgroundColor = '#0077B6';
   divGrid.style.display = 'grid';
   divGrid.style.gridTemplateColumns = `${(parseInt((100/cantVd)) + '%' + ' ').repeat(cantVd)}`;
-  divGrid.style.gridTemplateColumns = `${(parseInt((100/cantRs)) + '%' + ' ').repeat(cantRs)}`;
+  divGrid.style.gridTemplateRows = `${(parseInt((100/cantRs)) + '%' + ' ').repeat(cantRs)}`;
   divGrid.style.justifyContent = 'center';
   divGrid.style.alignItems = 'center';
   divGrid.style.textAlign = 'center';
@@ -467,7 +469,7 @@ function mostrarIteraciones(i, BiA) {
       valor.style.borderLeft = '1px solid white';
       valor.style.padding = '.25rem';
 
-      valor.innerHTML = BiA[i][j];
+      valor.innerHTML = Math.round((BiA[i][j] + Number.EPSILON) * 100) / 100;
 
       divGrid.append(valor);
     }
@@ -606,6 +608,8 @@ async function realizarSimplex() {
 
   let footer = document.getElementsByTagName('footer')[0];
   let body = document.getElementsByTagName('body')[0];
+
+  console.log('Lenght iteraciones: ' + iteraciones.length);
 
   for (let i = 0; i < iteraciones.length; i++) {
     console.log(iteraciones[i][8]);
